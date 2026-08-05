@@ -4,8 +4,12 @@
 features, built as a production-quality Project Based Learning (PBL) submission for a 2nd-year
 B.Tech IT program.
 
-> Status: actively generated — see `docs/` for architecture, diagrams and deployment instructions.
-> This README is the quick entry point; the full write-up lives in [`docs/README.md`](docs/README.md).
+> This README is the quick entry point; the full write-up (features, architecture, folder
+> structure, diagrams) lives in [`docs/README.md`](docs/README.md).
+>
+> **Verified:** `mvn test` (backend, JUnit/Mockito) and `npm run build` (frontend) both pass,
+> and the full stack has been smoke-tested end-to-end via `docker compose up` against a real
+> PostgreSQL database — see [`docs/DEPLOYMENT-GUIDE.md`](docs/DEPLOYMENT-GUIDE.md).
 
 ## Tech stack
 
@@ -15,7 +19,7 @@ B.Tech IT program.
 | Database   | PostgreSQL, Flyway migrations |
 | Auth       | JWT (access + refresh), BCrypt, role-based access (`USER`, `HOST`, `ADMIN`) |
 | AI         | LangChain4j + OpenAI API |
-| Frontend   | React 18, TypeScript, Vite, Tailwind CSS, React Router, React Query |
+| Frontend   | React 19, TypeScript, Vite, Tailwind CSS v4, React Router, React Query |
 | Docs/API   | springdoc-openapi (Swagger UI), Markdown + Mermaid diagrams |
 | Testing    | JUnit 5, Mockito, H2 (test scope) |
 
