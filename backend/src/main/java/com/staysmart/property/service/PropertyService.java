@@ -160,6 +160,22 @@ public class PropertyService {
                 .stream().limit(limit).map(PropertySummaryResponse::from).toList();
     }
 
+    /** Used by the AI Budget Planner to ground its estimate in real platform pricing for a city. */
+    @Transactional(readOnly = true)
+    public BigDecimal averagePriceForCity(String city) {
+        return propertyRepository.averagePriceForCity(city);
+    }
+
+    /** Used by the AI Recommendation feature as a candidate pool for a given city. */
+    @Transactional(readOnly = true)
+    public List<PropertySummaryResponse> topRatedInCity(String city, int limit) {
+        return propertyRepository.findTop20ByCityIgnoreCaseOrderByAvgRatingDesc(city).stream()
+                .filter(p -> p.getStatus() == PropertyStatus.ACTIVE)
+                .limit(limit)
+                .map(PropertySummaryResponse::from)
+                .toList();
+    }
+
     @Transactional
     public List<String> uploadImages(Long propertyId, Long requesterId, List<MultipartFile> files) {
         Property property = getEntityById(propertyId);
