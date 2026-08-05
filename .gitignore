@@ -1,0 +1,29 @@
+# --- Backend (Maven / Java) ---
+backend/target/
+backend/uploads/
+*.class
+*.jar
+
+# --- Frontend (Node / Vite) ---
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/*.local
+
+# --- Env / secrets ---
+.env
+.env.*
+!.env.example
+**/application-local.yml
+
+# --- IDE / OS ---
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+logs/
+
+# --- Docker ---
+docker/postgres-data/
