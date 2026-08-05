@@ -192,4 +192,9 @@ public class BookingService {
     public long countAll() {
         return bookingRepository.count();
     }
+
+    /** Raw {@code [month, count, revenue]} rows for admin analytics; Postgres-specific (date_trunc). */
+    public List<Object[]> monthlyStatsRaw() {
+        return bookingRepository.monthlyBookingStats();
+    }
 }

@@ -160,6 +160,20 @@ public class PropertyService {
                 .stream().limit(limit).map(PropertySummaryResponse::from).toList();
     }
 
+    /** Admin-only: lists every property regardless of status. */
+    @Transactional(readOnly = true)
+    public Page<PropertySummaryResponse> listAllForAdmin(Pageable pageable) {
+        return propertyRepository.findAll(pageable).map(PropertySummaryResponse::from);
+    }
+
+    public long countAll() {
+        return propertyRepository.count();
+    }
+
+    public long countByStatus(PropertyStatus status) {
+        return propertyRepository.countByStatus(status);
+    }
+
     /** Used by the AI Budget Planner to ground its estimate in real platform pricing for a city. */
     @Transactional(readOnly = true)
     public BigDecimal averagePriceForCity(String city) {

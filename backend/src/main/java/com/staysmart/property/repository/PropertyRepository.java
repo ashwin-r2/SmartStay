@@ -1,6 +1,7 @@
 package com.staysmart.property.repository;
 
 import com.staysmart.property.entity.Property;
+import com.staysmart.property.entity.PropertyStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +22,6 @@ public interface PropertyRepository extends JpaRepository<Property, Long>, JpaSp
     BigDecimal averagePriceForCity(@Param("city") String city);
 
     List<Property> findTop20ByCityIgnoreCaseOrderByAvgRatingDesc(String city);
+
+    long countByStatus(PropertyStatus status);
 }
