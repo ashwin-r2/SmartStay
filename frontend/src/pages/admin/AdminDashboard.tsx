@@ -21,6 +21,9 @@ export function AdminDashboard() {
           <Link to="/admin/properties" className="rounded-full border border-neutral-300 px-3 py-1.5 hover:bg-neutral-50">
             Manage Properties
           </Link>
+          <Link to="/admin/amenities" className="rounded-full border border-neutral-300 px-3 py-1.5 hover:bg-neutral-50">
+            Manage Amenities
+          </Link>
           <Link to="/admin/analytics" className="rounded-full border border-neutral-300 px-3 py-1.5 hover:bg-neutral-50">
             Booking Analytics
           </Link>

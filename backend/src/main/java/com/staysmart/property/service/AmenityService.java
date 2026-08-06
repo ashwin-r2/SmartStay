@@ -33,6 +33,22 @@ public class AmenityService {
     }
 
     @Transactional
+    public AmenityResponse update(Long id, AmenityRequest request) {
+        Amenity amenity = amenityRepository.findById(id)
+                .orElseThrow(() -> ResourceNotFoundException.of("Amenity", id));
+
+        amenityRepository.findByNameIgnoreCase(request.name())
+                .filter(a -> !a.getId().equals(id))
+                .ifPresent(a -> {
+                    throw new ConflictException("Amenity '" + request.name() + "' already exists");
+                });
+
+        amenity.setName(request.name());
+        amenity.setIcon(request.icon());
+        return AmenityResponse.from(amenityRepository.save(amenity));
+    }
+
+    @Transactional
     public void delete(Long id) {
         if (!amenityRepository.existsById(id)) {
             throw ResourceNotFoundException.of("Amenity", id);

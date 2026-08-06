@@ -60,4 +60,12 @@ export const propertiesApi = {
 
 export const amenitiesApi = {
   list: () => api.get<ApiResponse<Amenity[]>>("/amenities").then((r) => r.data.data),
+
+  create: (payload: { name: string; icon?: string }) =>
+    api.post<ApiResponse<Amenity>>("/amenities", payload).then((r) => r.data.data),
+
+  update: (id: number, payload: { name: string; icon?: string }) =>
+    api.put<ApiResponse<Amenity>>(`/amenities/${id}`, payload).then((r) => r.data.data),
+
+  remove: (id: number) => api.delete(`/amenities/${id}`),
 };

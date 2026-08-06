@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -41,6 +42,13 @@ public class AmenityController {
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<AmenityResponse> create(@Valid @RequestBody AmenityRequest request) {
         return ApiResponse.ok("Amenity created", amenityService.create(request));
+    }
+
+    @Operation(summary = "Update an amenity's name/icon (ADMIN only)")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{id}")
+    public ApiResponse<AmenityResponse> update(@PathVariable Long id, @Valid @RequestBody AmenityRequest request) {
+        return ApiResponse.ok("Amenity updated", amenityService.update(id, request));
     }
 
     @Operation(summary = "Delete an amenity (ADMIN only)")

@@ -21,6 +21,7 @@ import { PropertyCalendar } from "./pages/host/PropertyCalendar";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { ManageUsers } from "./pages/admin/ManageUsers";
 import { ManageProperties } from "./pages/admin/ManageProperties";
+import { ManageAmenities } from "./pages/admin/ManageAmenities";
 import { Analytics } from "./pages/admin/Analytics";
 import { AiStats } from "./pages/admin/AiStats";
 
@@ -121,6 +122,14 @@ function App() {
           element={
             <ProtectedRoute roles={["ADMIN"]}>
               <ManageProperties />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="admin/amenities"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <ManageAmenities />
             </ProtectedRoute>
           }
         />
