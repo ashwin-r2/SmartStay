@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { propertiesApi } from "../api/properties";
+import { propertiesApi, amenitiesApi } from "../api/properties";
 import { PropertyCard } from "../components/PropertyCard";
 import { Pagination } from "../components/Pagination";
 import { LoadingSpinner } from "../components/LoadingSpinner";
@@ -10,6 +10,7 @@ import { SmartSearchBox } from "../components/SmartSearchBox";
 import { extractErrorMessage } from "../api/client";
 
 const PROPERTY_TYPES = ["APARTMENT", "HOUSE", "VILLA", "CABIN", "CONDO", "STUDIO", "COTTAGE", "FARM_STAY"];
+const ROOM_TYPES = ["ENTIRE_PLACE", "PRIVATE_ROOM", "SHARED_ROOM"];
 
 export function SearchResults() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,7 +23,14 @@ export function SearchResults() {
   const minPrice = searchParams.get("minPrice") ?? "";
   const maxPrice = searchParams.get("maxPrice") ?? "";
   const propertyType = searchParams.get("propertyType") ?? "";
+  const roomType = searchParams.get("roomType") ?? "";
   const keyword = searchParams.get("keyword") ?? "";
+  const amenityIds = (searchParams.get("amenityIds") ?? "")
+    .split(",")
+    .map((id) => Number(id))
+    .filter((id) => Number.isFinite(id) && id > 0);
+
+  const amenitiesQuery = useQuery({ queryKey: ["amenities"], queryFn: amenitiesApi.list });
 
   const query = useQuery({
     queryKey: ["properties", "search", Object.fromEntries(searchParams), page],
@@ -35,6 +43,8 @@ export function SearchResults() {
         minPrice: minPrice ? Number(minPrice) : undefined,
         maxPrice: maxPrice ? Number(maxPrice) : undefined,
         propertyType: propertyType || undefined,
+        roomType: roomType || undefined,
+        amenityIds: amenityIds.length > 0 ? amenityIds : undefined,
         keyword: keyword || undefined,
         page,
         size: 12,
@@ -47,6 +57,11 @@ export function SearchResults() {
     else next.delete(key);
     setSearchParams(next);
     setPage(0);
+  };
+
+  const toggleAmenity = (id: number) => {
+    const next = amenityIds.includes(id) ? amenityIds.filter((a) => a !== id) : [...amenityIds, id];
+    updateFilter("amenityIds", next.join(","));
   };
 
   return (
@@ -112,6 +127,39 @@ export function SearchResults() {
               ))}
             </select>
           </div>
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-neutral-500">Room type</label>
+            <select
+              value={roomType}
+              onChange={(e) => updateFilter("roomType", e.target.value)}
+              className="w-full rounded-lg border border-neutral-300 px-3 py-1.5 text-sm"
+            >
+              <option value="">Any</option>
+              {ROOM_TYPES.map((t) => (
+                <option key={t} value={t}>
+                  {t.replace("_", " ")}
+                </option>
+              ))}
+            </select>
+          </div>
+          {amenitiesQuery.data && amenitiesQuery.data.length > 0 && (
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-neutral-500">Amenities</label>
+              <div className="max-h-48 space-y-1.5 overflow-y-auto">
+                {amenitiesQuery.data.map((a) => (
+                  <label key={a.id} className="flex items-center gap-2 text-sm text-neutral-700">
+                    <input
+                      type="checkbox"
+                      checked={amenityIds.includes(a.id)}
+                      onChange={() => toggleAmenity(a.id)}
+                      className="rounded border-neutral-300"
+                    />
+                    {a.name}
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
           <button
             onClick={() => setSearchParams(new URLSearchParams())}
             className="w-full rounded-lg border border-neutral-300 py-1.5 text-sm text-neutral-600 hover:bg-neutral-50"

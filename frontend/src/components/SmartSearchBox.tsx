@@ -32,6 +32,8 @@ export function SmartSearchBox() {
       if (f.minPrice) params.set("minPrice", String(f.minPrice));
       if (f.maxPrice) params.set("maxPrice", String(f.maxPrice));
       if (f.propertyType) params.set("propertyType", f.propertyType);
+      if (f.roomType) params.set("roomType", f.roomType);
+      if (f.amenityIds && f.amenityIds.length > 0) params.set("amenityIds", f.amenityIds.join(","));
       if (f.keyword) params.set("keyword", f.keyword);
       navigate(`/search?${params.toString()}`);
     } catch (err) {
