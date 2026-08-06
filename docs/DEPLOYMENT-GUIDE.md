@@ -76,8 +76,13 @@ Vite's dev server (`http://localhost:5173`) proxies `/api/**` to `http://localho
 | `JWT_REFRESH_EXPIRATION_MS` | `1209600000` (14d) | Refresh token lifetime |
 | `CORS_ALLOWED_ORIGINS` | `http://localhost:5173` | Comma-separated allowed origins |
 | `UPLOADS_DIR` | `uploads` | Local disk path for uploaded images |
-| `OPENAI_API_KEY` | *(empty)* | Enables real AI responses; omit to run AI-free |
+| `AI_PROVIDER` | `openai` | `openai`, `gemini`, or `claude` — selects which LangChain4j client `AiConfig` wires up |
+| `OPENAI_API_KEY` | *(empty)* | Enables real AI responses when `AI_PROVIDER=openai`; omit to run AI-free |
 | `OPENAI_CHAT_MODEL` | `gpt-4o-mini` | Any OpenAI chat-completion model |
+| `GEMINI_API_KEY` | *(empty)* | Enables real AI responses when `AI_PROVIDER=gemini` — get one at [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
+| `GEMINI_CHAT_MODEL` | `gemini-3.6-flash` | Any Gemini chat-completion model |
+| `ANTHROPIC_API_KEY` | *(empty)* | Enables real AI responses when `AI_PROVIDER=claude` — get one at [console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys) |
+| `ANTHROPIC_CHAT_MODEL` | `claude-haiku-4-5` | Any Claude chat-completion model |
 | `SPRING_PROFILES_ACTIVE` | `dev` | `dev` \| `prod` \| `test` |
 | `VITE_API_BASE_URL` (frontend) | `/api` | Override if the backend isn't reverse-proxied under the same origin |
 

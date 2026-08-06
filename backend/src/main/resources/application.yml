@@ -47,11 +47,24 @@ app:
     dir: ${UPLOADS_DIR:uploads}
     base-url: ${UPLOADS_BASE_URL:/api/files}
   ai:
+    # "openai", "gemini", or "claude" — selects which client AiConfig wires up. Defaults to
+    # openai for backward compatibility; set AI_PROVIDER to switch.
+    provider: ${AI_PROVIDER:openai}
     openai:
       api-key: ${OPENAI_API_KEY:}
       chat-model: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
       temperature: ${OPENAI_TEMPERATURE:0.7}
       timeout-seconds: ${OPENAI_TIMEOUT_SECONDS:30}
+    gemini:
+      api-key: ${GEMINI_API_KEY:}
+      chat-model: ${GEMINI_CHAT_MODEL:gemini-3.6-flash}
+      temperature: ${GEMINI_TEMPERATURE:0.7}
+      timeout-seconds: ${GEMINI_TIMEOUT_SECONDS:30}
+    claude:
+      api-key: ${ANTHROPIC_API_KEY:}
+      chat-model: ${ANTHROPIC_CHAT_MODEL:claude-haiku-4-5}
+      temperature: ${ANTHROPIC_TEMPERATURE:0.7}
+      timeout-seconds: ${ANTHROPIC_TIMEOUT_SECONDS:30}
   booking:
     free-cancellation-hours: 48
 

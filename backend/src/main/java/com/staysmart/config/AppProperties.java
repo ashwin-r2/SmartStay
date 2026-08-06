@@ -45,11 +45,33 @@ public class AppProperties {
     @Getter
     @Setter
     public static class Ai {
+        /** Which provider {@link com.staysmart.config.AiConfig} wires up: "openai", "gemini", or "claude". */
+        private String provider;
         private final OpenAi openai = new OpenAi();
+        private final Gemini gemini = new Gemini();
+        private final Claude claude = new Claude();
 
         @Getter
         @Setter
         public static class OpenAi {
+            private String apiKey;
+            private String chatModel;
+            private double temperature;
+            private int timeoutSeconds;
+        }
+
+        @Getter
+        @Setter
+        public static class Gemini {
+            private String apiKey;
+            private String chatModel;
+            private double temperature;
+            private int timeoutSeconds;
+        }
+
+        @Getter
+        @Setter
+        public static class Claude {
             private String apiKey;
             private String chatModel;
             private double temperature;
