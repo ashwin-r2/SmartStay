@@ -49,10 +49,23 @@ public final class PropertySpecifications {
                 predicates.add(cb.equal(root.get("roomType"), criteria.roomType().toUpperCase()));
             }
             if (criteria.keyword() != null && !criteria.keyword().isBlank()) {
-                String like = "%" + criteria.keyword().toLowerCase() + "%";
-                predicates.add(cb.or(
-                        cb.like(cb.lower(root.get("title")), like),
-                        cb.like(cb.lower(root.get("description")), like)));
+                // Match if ANY word of the keyword appears in the title/description, rather than
+                // requiring the whole phrase verbatim - a free-text keyword like "cozy beach"
+                // (whether typed by a guest or extracted by AI Smart Search) should still surface
+                // a listing whose description only says "...walk from Palolem Beach...".
+                List<Predicate> wordPredicates = new ArrayList<>();
+                for (String word : criteria.keyword().toLowerCase().split("\\s+")) {
+                    if (word.isBlank()) {
+                        continue;
+                    }
+                    String like = "%" + word + "%";
+                    wordPredicates.add(cb.or(
+                            cb.like(cb.lower(root.get("title")), like),
+                            cb.like(cb.lower(root.get("description")), like)));
+                }
+                if (!wordPredicates.isEmpty()) {
+                    predicates.add(cb.or(wordPredicates.toArray(new Predicate[0])));
+                }
             }
             if (criteria.amenityIds() != null && !criteria.amenityIds().isEmpty()) {
                 predicates.add(root.join("amenities").get("id").in(criteria.amenityIds()));

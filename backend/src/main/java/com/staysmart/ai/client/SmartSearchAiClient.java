@@ -15,7 +15,11 @@ public interface SmartSearchAiClient {
             - checkIn/checkOut must be "yyyy-MM-dd" strings or null.
             - guests, minPrice, maxPrice are numbers or null.
             - propertyType, if present, must be one of APARTMENT, HOUSE, VILLA, CABIN, CONDO,
-              STUDIO, COTTAGE, FARM_STAY (or null).
+              STUDIO, COTTAGE, FARM_STAY (or null). Only set this when the guest names a SPECIFIC
+              type of place. Generic words like "house", "place", "home", "stay", or "property"
+              used loosely (e.g. "beach house", "a nice place to stay") do NOT count as a specific
+              type - leave propertyType null in that case and let "keyword" carry that language
+              instead, so a matching villa/studio/apartment/etc. isn't wrongly filtered out.
             - roomType, if present, must be one of ENTIRE_PLACE, PRIVATE_ROOM, SHARED_ROOM (or null).
             - amenities is a JSON array of amenity names the guest wants, chosen ONLY from this
               exact list (copy the name verbatim, case-sensitive): {{amenityCatalog}}
