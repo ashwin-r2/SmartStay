@@ -107,11 +107,12 @@ public class AiController {
         return ApiResponse.ok(budgetPlannerAiService.plan(currentUser.getId(), request));
     }
 
-    @Operation(summary = "Search properties using a natural-language query")
+    @Operation(summary = "Search properties using a natural-language query (works for guests too)")
     @PostMapping("/smart-search")
     public ApiResponse<SmartSearchResponse> smartSearch(@AuthenticationPrincipal User currentUser,
                                                           @Valid @RequestBody SmartSearchRequest request,
                                                           @PageableDefault(size = 20) Pageable pageable) {
-        return ApiResponse.ok(smartSearchAiService.search(currentUser.getId(), request.query(), pageable));
+        Long userId = currentUser != null ? currentUser.getId() : null;
+        return ApiResponse.ok(smartSearchAiService.search(userId, request.query(), pageable));
     }
 }

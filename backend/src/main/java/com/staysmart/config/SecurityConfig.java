@@ -55,7 +55,11 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/v3/api-docs/**",
-            "/actuator/health"
+            "/actuator/health",
+            // AI Smart Search is a guest-facing feature on the homepage (SmartSearchBox) - it
+            // must work before login. AiController#smartSearch already tolerates a null
+            // currentUser (usage is logged with a null user_id in that case).
+            "/ai/smart-search"
     };
 
     @Bean
