@@ -7,6 +7,8 @@ PostgreSQL schema managed by Flyway. Source of truth:
 |---|---|
 | `V1__init_schema.sql` | All 12 tables, constraints, indexes |
 | `V2__seed_sample_data.sql` | Demo users/properties/bookings/reviews/AI logs (see [sample-data.sql](sample-data.sql)) |
+| `V3__more_sample_data.sql` | More hosts/guests/properties (new cities) + bookings covering every status incl. `PENDING`, reviews, AI logs |
+| `V4__ooty_coorg_hyderabad_properties.sql` | 24 more properties: 6 in Ooty, 10 in Coorg, 8 in Hyderabad |
 
 See [`ER-DIAGRAM.md`](ER-DIAGRAM.md) for the visual relationship diagram.
 
