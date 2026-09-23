@@ -30,3 +30,6 @@ docker/postgres-data/
 
 # --- Tooling ---
 .claude/
+
+# Office lock files
+~$*
