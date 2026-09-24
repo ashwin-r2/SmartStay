@@ -65,11 +65,12 @@ public class AiController {
         return ApiResponse.ok(recommendationAiService.recommend(currentUser.getId(), city));
     }
 
-    @Operation(summary = "Get an AI-generated summary of a property's reviews")
+    @Operation(summary = "Get an AI-generated summary of a property's reviews (works for guests too)")
     @GetMapping("/reviews/{propertyId}/summary")
     public ApiResponse<ReviewSummaryResponse> reviewSummary(@PathVariable Long propertyId,
                                                               @AuthenticationPrincipal User currentUser) {
-        return ApiResponse.ok(reviewSummaryAiService.summarize(propertyId, currentUser.getId()));
+        Long userId = currentUser != null ? currentUser.getId() : null;
+        return ApiResponse.ok(reviewSummaryAiService.summarize(propertyId, userId));
     }
 
     @Operation(summary = "Send a message to the AI chat assistant (creates a new session if sessionId is omitted)")

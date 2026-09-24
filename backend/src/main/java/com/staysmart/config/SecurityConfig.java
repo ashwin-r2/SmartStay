@@ -47,7 +47,10 @@ public class SecurityConfig {
             "/properties/**",
             "/amenities/**",
             "/reviews/property/**",
-            "/files/**"
+            "/files/**",
+            // The "AI Summary" button on PropertyDetails is shown to guests, like the reviews
+            // it summarises. AiController#reviewSummary tolerates a null currentUser.
+            "/ai/reviews/*/summary"
     };
 
     private static final String[] PUBLIC_ENDPOINTS = {
