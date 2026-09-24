@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { propertiesApi, amenitiesApi } from "../api/properties";
@@ -14,7 +13,15 @@ const ROOM_TYPES = ["ENTIRE_PLACE", "PRIVATE_ROOM", "SHARED_ROOM"];
 
 export function SearchResults() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [page, setPage] = useState(0);
+  // Page lives in the URL alongside the filters, so any new search (Ask AI, Clear filters,
+  // a filter change) that replaces the params also drops back to the first page.
+  const page = Math.max(0, Number(searchParams.get("page")) || 0);
+  const setPage = (next: number) => {
+    const params = new URLSearchParams(searchParams);
+    if (next > 0) params.set("page", String(next));
+    else params.delete("page");
+    setSearchParams(params);
+  };
 
   const city = searchParams.get("city") ?? "";
   const checkIn = searchParams.get("checkIn") ?? "";
@@ -55,8 +62,8 @@ export function SearchResults() {
     const next = new URLSearchParams(searchParams);
     if (value) next.set(key, value);
     else next.delete(key);
+    next.delete("page");
     setSearchParams(next);
-    setPage(0);
   };
 
   const toggleAmenity = (id: number) => {
