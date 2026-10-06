@@ -85,6 +85,8 @@ export function SearchResults() {
           <div>
             <label className="mb-1 block text-xs font-semibold text-neutral-500">City</label>
             <input
+              // Keyed on the URL value so an "Ask AI" search on this page refreshes the box.
+              key={city}
               defaultValue={city}
               onBlur={(e) => updateFilter("city", e.target.value)}
               placeholder="e.g. Jaipur"
@@ -94,7 +96,6 @@ export function SearchResults() {
           <div>
             <label className="mb-1 block text-xs font-semibold text-neutral-500">State</label>
             <input
-              // Keyed on the URL value so an "Ask AI" search on this page refreshes the box.
               key={state}
               defaultValue={state}
               onBlur={(e) => updateFilter("state", e.target.value)}
@@ -107,6 +108,7 @@ export function SearchResults() {
               <label className="mb-1 block text-xs font-semibold text-neutral-500">Min price</label>
               <input
                 type="number"
+                key={minPrice}
                 defaultValue={minPrice}
                 onBlur={(e) => updateFilter("minPrice", e.target.value)}
                 className="w-full rounded-lg border border-neutral-300 px-3 py-1.5 text-sm"
@@ -116,6 +118,7 @@ export function SearchResults() {
               <label className="mb-1 block text-xs font-semibold text-neutral-500">Max price</label>
               <input
                 type="number"
+                key={maxPrice}
                 defaultValue={maxPrice}
                 onBlur={(e) => updateFilter("maxPrice", e.target.value)}
                 className="w-full rounded-lg border border-neutral-300 px-3 py-1.5 text-sm"
@@ -127,6 +130,7 @@ export function SearchResults() {
             <input
               type="number"
               min={1}
+              key={guests}
               defaultValue={guests}
               onBlur={(e) => updateFilter("guests", e.target.value)}
               className="w-full rounded-lg border border-neutral-300 px-3 py-1.5 text-sm"
