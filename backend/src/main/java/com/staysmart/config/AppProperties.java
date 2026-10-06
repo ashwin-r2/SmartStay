@@ -67,6 +67,8 @@ public class AppProperties {
             private String chatModel;
             private double temperature;
             private int timeoutSeconds;
+            private int maxRetries;
+            private long retryBackoffMs;
         }
 
         @Getter

@@ -49,7 +49,7 @@ public class AiConfig {
         if (apiKey == null || apiKey.isBlank()) {
             log.warn("AI provider is 'openai' but OPENAI_API_KEY is not set — AI features will respond with a "
                     + "'not configured' message. Set the OPENAI_API_KEY environment variable to enable real AI responses.");
-            return new NoopChatLanguageModel();
+            return new NoopChatLanguageModel("OPENAI_API_KEY is not configured on the server. Set OPENAI_API_KEY in .env to enable AI features.");
         }
         return OpenAiChatModel.builder()
                 .apiKey(apiKey)
@@ -66,14 +66,17 @@ public class AiConfig {
         if (apiKey == null || apiKey.isBlank()) {
             log.warn("AI provider is 'gemini' but GEMINI_API_KEY is not set — AI features will respond with a "
                     + "'not configured' message. Set the GEMINI_API_KEY environment variable to enable real AI responses.");
-            return new NoopChatLanguageModel();
+            return new NoopChatLanguageModel("GEMINI_API_KEY is not configured on the server. Set GEMINI_API_KEY in .env to enable AI features.");
         }
-        return GoogleAiGeminiChatModel.builder()
+        AppProperties.Ai.Gemini gemini = appProperties.getAi().getGemini();
+        ChatLanguageModel model = GoogleAiGeminiChatModel.builder()
                 .apiKey(apiKey)
-                .modelName(appProperties.getAi().getGemini().getChatModel())
-                .temperature(appProperties.getAi().getGemini().getTemperature())
-                .timeout(Duration.ofSeconds(appProperties.getAi().getGemini().getTimeoutSeconds()))
+                .modelName(gemini.getChatModel())
+                .temperature(gemini.getTemperature())
+                .timeout(Duration.ofSeconds(gemini.getTimeoutSeconds()))
                 .build();
+        // Gemini returns 503 UNAVAILABLE during demand spikes; retry those with backoff.
+        return new RetryingChatLanguageModel(model, gemini.getMaxRetries(), gemini.getRetryBackoffMs());
     }
 
     private ChatLanguageModel claudeModel() {
@@ -81,7 +84,7 @@ public class AiConfig {
         if (apiKey == null || apiKey.isBlank()) {
             log.warn("AI provider is 'claude' but ANTHROPIC_API_KEY is not set — AI features will respond with a "
                     + "'not configured' message. Set the ANTHROPIC_API_KEY environment variable to enable real AI responses.");
-            return new NoopChatLanguageModel();
+            return new NoopChatLanguageModel("ANTHROPIC_API_KEY is not configured on the server. Set ANTHROPIC_API_KEY in .env to enable AI features.");
         }
         return AnthropicChatModel.builder()
                 .apiKey(apiKey)

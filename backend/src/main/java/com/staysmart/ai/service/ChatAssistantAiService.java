@@ -80,8 +80,7 @@ public class ChatAssistantAiService {
         } catch (Exception e) {
             log.warn("Chat assistant call failed for user {}: {}", userId, e.getMessage());
             usageLogger.logFailure(AiFeature.CHAT_ASSISTANT, userId, System.currentTimeMillis() - start, e.getMessage());
-            String msg = e.getMessage() != null && e.getMessage().contains("OPENAI_API_KEY")
-                    ? e.getMessage() : "The AI assistant is temporarily unavailable. Please try again shortly.";
+            String msg = friendlyChatMessage(e);
             throw new AiServiceException(msg, e);
         }
 
@@ -100,5 +99,23 @@ public class ChatAssistantAiService {
             throw new ForbiddenException("You cannot view another user's chat session");
         }
         return messages.stream().map(ChatMessageDto::from).toList();
+    }
+
+    private String friendlyChatMessage(Exception e) {
+        String msg = e.getMessage();
+        if (msg == null) {
+            return "The AI assistant is temporarily unavailable. Please try again shortly.";
+        }
+        if (msg.contains("OPENAI_API_KEY") || msg.contains("GEMINI_API_KEY") || msg.contains("ANTHROPIC_API_KEY")) {
+            return msg;
+        }
+        if (msg.contains("401") || msg.contains("UNAUTHENTICATED") || msg.contains("Unauthorized")
+                || msg.contains("invalid authentication credentials") || msg.contains("API key not valid")) {
+            return "AI API key authentication failed (401 Unauthorized). Please check your API key in .env.";
+        }
+        if (msg.contains("429") || msg.contains("RESOURCE_EXHAUSTED") || msg.contains("quota") || msg.contains("Rate limit")) {
+            return "AI provider rate limit or quota exceeded. Please check your provider account quota.";
+        }
+        return "The AI assistant is temporarily unavailable. Please try again shortly.";
     }
 }

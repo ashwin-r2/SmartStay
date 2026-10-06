@@ -13,9 +13,18 @@ import java.util.List;
  */
 public class NoopChatLanguageModel implements ChatLanguageModel {
 
+    private final String message;
+
+    public NoopChatLanguageModel() {
+        this("AI API key is not configured on the server. Set OPENAI_API_KEY or GEMINI_API_KEY in .env to enable AI features.");
+    }
+
+    public NoopChatLanguageModel(String message) {
+        this.message = message;
+    }
+
     @Override
     public dev.langchain4j.model.output.Response<dev.langchain4j.data.message.AiMessage> generate(List<ChatMessage> messages) {
-        throw new IllegalStateException(
-                "OPENAI_API_KEY is not configured on the server. Set it as an environment variable to enable AI features.");
+        throw new IllegalStateException(message);
     }
 }

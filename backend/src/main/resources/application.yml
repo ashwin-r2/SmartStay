@@ -60,6 +60,9 @@ app:
       chat-model: ${GEMINI_CHAT_MODEL:gemini-3.6-flash}
       temperature: ${GEMINI_TEMPERATURE:0.7}
       timeout-seconds: ${GEMINI_TIMEOUT_SECONDS:30}
+      # Retries for 503 UNAVAILABLE ("high demand"); backoff doubles each attempt (1s, 2s, 4s).
+      max-retries: ${GEMINI_MAX_RETRIES:3}
+      retry-backoff-ms: ${GEMINI_RETRY_BACKOFF_MS:1000}
     claude:
       api-key: ${ANTHROPIC_API_KEY:}
       chat-model: ${ANTHROPIC_CHAT_MODEL:claude-haiku-4-5}
