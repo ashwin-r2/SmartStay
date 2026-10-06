@@ -22,7 +22,15 @@ $backendConn = Test-NetConnection -ComputerName localhost -Port 8080 -WarningAct
 if ($backendConn.TcpTestSucceeded) {
     Write-Host "[OK] Backend is already running on http://localhost:8080/api" -ForegroundColor Green
 } else {
-    $javaBin = if (Test-Path "C:\Users\ashwi\.jdks\ms-21.0.7\bin\java.exe") { "C:\Users\ashwi\.jdks\ms-21.0.7\bin\java.exe" } else { "java" }
+    # Prefer JAVA_HOME (from the environment or .env), else fall back to java on PATH. Needs JDK 21+.
+    $javaBin = "java"
+    if ($env:JAVA_HOME -and (Test-Path "$env:JAVA_HOME\bin\java.exe")) {
+        $javaBin = "$env:JAVA_HOME\bin\java.exe"
+    } elseif (-not (Get-Command java -ErrorAction SilentlyContinue)) {
+        Write-Host "[ERROR] Java not found. Set JAVA_HOME (in your environment or .env) or add java to PATH." -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "[...] Starting backend with $javaBin ..." -ForegroundColor Yellow
     Start-Process -FilePath $javaBin -ArgumentList "-jar", "target/staysmart-ai-backend.jar" -WorkingDirectory "$PSScriptRoot\backend" -WindowStyle Hidden
     Start-Sleep -Seconds 6
 }
