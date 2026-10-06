@@ -168,6 +168,7 @@ export interface AvailabilityBlock {
 
 export interface PropertySearchParams {
   city?: string;
+  state?: string;
   country?: string;
   checkIn?: string;
   checkOut?: string;

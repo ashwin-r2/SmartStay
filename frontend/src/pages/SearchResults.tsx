@@ -24,6 +24,7 @@ export function SearchResults() {
   };
 
   const city = searchParams.get("city") ?? "";
+  const state = searchParams.get("state") ?? "";
   const checkIn = searchParams.get("checkIn") ?? "";
   const checkOut = searchParams.get("checkOut") ?? "";
   const guests = searchParams.get("guests") ?? "";
@@ -44,6 +45,7 @@ export function SearchResults() {
     queryFn: () =>
       propertiesApi.search({
         city: city || undefined,
+        state: state || undefined,
         checkIn: checkIn || undefined,
         checkOut: checkOut || undefined,
         guests: guests ? Number(guests) : undefined,
@@ -85,7 +87,18 @@ export function SearchResults() {
             <input
               defaultValue={city}
               onBlur={(e) => updateFilter("city", e.target.value)}
-              placeholder="e.g. Goa"
+              placeholder="e.g. Jaipur"
+              className="w-full rounded-lg border border-neutral-300 px-3 py-1.5 text-sm"
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-neutral-500">State</label>
+            <input
+              // Keyed on the URL value so an "Ask AI" search on this page refreshes the box.
+              key={state}
+              defaultValue={state}
+              onBlur={(e) => updateFilter("state", e.target.value)}
+              placeholder="e.g. Kerala"
               className="w-full rounded-lg border border-neutral-300 px-3 py-1.5 text-sm"
             />
           </div>

@@ -59,6 +59,7 @@ public class SmartSearchAiService {
             ParsedFilters parsed = objectMapper.readValue(cleaned, ParsedFilters.class);
             return new PropertySearchCriteria(
                     blankToNull(parsed.city()),
+                    blankToNull(parsed.state()),
                     blankToNull(parsed.country()),
                     parseDate(parsed.checkIn()),
                     parseDate(parsed.checkOut()),
@@ -71,7 +72,7 @@ public class SmartSearchAiService {
                     blankToNull(parsed.keyword()));
         } catch (Exception e) {
             log.warn("Could not parse Smart Search AI output as JSON, falling back to keyword search: {}", e.getMessage());
-            return new PropertySearchCriteria(null, null, null, null, null, null, null, null, null, null, originalQuery);
+            return new PropertySearchCriteria(null, null, null, null, null, null, null, null, null, null, null, originalQuery);
         }
     }
 
@@ -107,6 +108,7 @@ public class SmartSearchAiService {
     @JsonIgnoreProperties(ignoreUnknown = true)
     private record ParsedFilters(
             String city,
+            String state,
             String country,
             String checkIn,
             String checkOut,

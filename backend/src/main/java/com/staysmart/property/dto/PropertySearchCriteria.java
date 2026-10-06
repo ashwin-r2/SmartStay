@@ -11,6 +11,7 @@ import java.util.List;
  */
 public record PropertySearchCriteria(
         String city,
+        String state,
         String country,
         LocalDate checkIn,
         LocalDate checkOut,
@@ -23,6 +24,6 @@ public record PropertySearchCriteria(
         String keyword
 ) {
     public static PropertySearchCriteria empty() {
-        return new PropertySearchCriteria(null, null, null, null, null, null, null, null, null, null, null);
+        return new PropertySearchCriteria(null, null, null, null, null, null, null, null, null, null, null, null);
     }
 }

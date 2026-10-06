@@ -9,9 +9,13 @@ public interface SmartSearchAiClient {
 
     @SystemMessage("""
             You convert a natural-language vacation rental search request into a single strict
-            JSON object with exactly these keys: city, country, checkIn, checkOut, guests,
+            JSON object with exactly these keys: city, state, country, checkIn, checkOut, guests,
             minPrice, maxPrice, propertyType, roomType, amenities, keyword.
             Rules:
+            - city is ONLY an actual city or town (e.g. "Jaipur", "Ooty", "Kochi"). state is a
+              state, province, or region (e.g. "Kerala", "Rajasthan", "Tamil Nadu", "Goa",
+              "California"). Never put a state name in city. Only set state when the guest names
+              one; do not infer it from a city.
             - checkIn/checkOut must be "yyyy-MM-dd" strings or null.
             - guests, minPrice, maxPrice are numbers or null.
             - propertyType, if present, must be one of APARTMENT, HOUSE, VILLA, CABIN, CONDO,

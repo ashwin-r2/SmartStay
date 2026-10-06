@@ -26,6 +26,7 @@ export function SmartSearchBox() {
       const f = result.interpretedFilters;
       const params = new URLSearchParams();
       if (f.city) params.set("city", f.city);
+      if (f.state) params.set("state", f.state);
       if (f.checkIn) params.set("checkIn", f.checkIn);
       if (f.checkOut) params.set("checkOut", f.checkOut);
       if (f.guests) params.set("guests", String(f.guests));

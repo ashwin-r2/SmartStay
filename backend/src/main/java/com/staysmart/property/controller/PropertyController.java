@@ -45,10 +45,11 @@ public class PropertyController {
 
     private final PropertyService propertyService;
 
-    @Operation(summary = "Search active properties with filters (city, dates, guests, price, amenities, keyword)")
+    @Operation(summary = "Search active properties with filters (city, state, dates, guests, price, amenities, keyword)")
     @GetMapping("/search")
     public ApiResponse<PageResponse<PropertySummaryResponse>> search(
             @RequestParam(required = false) String city,
+            @RequestParam(required = false) String state,
             @RequestParam(required = false) String country,
             @RequestParam(required = false) LocalDate checkIn,
             @RequestParam(required = false) LocalDate checkOut,
@@ -62,7 +63,7 @@ public class PropertyController {
             @PageableDefault(size = 20) Pageable pageable) {
 
         PropertySearchCriteria criteria = new PropertySearchCriteria(
-                city, country, checkIn, checkOut, guests, minPrice, maxPrice, propertyType, roomType, amenityIds, keyword);
+                city, state, country, checkIn, checkOut, guests, minPrice, maxPrice, propertyType, roomType, amenityIds, keyword);
         return ApiResponse.ok(PageResponse.from(propertyService.search(criteria, pageable)));
     }
 

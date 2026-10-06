@@ -30,6 +30,9 @@ public final class PropertySpecifications {
             if (criteria.city() != null && !criteria.city().isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("city")), "%" + criteria.city().toLowerCase() + "%"));
             }
+            if (criteria.state() != null && !criteria.state().isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("state")), "%" + criteria.state().toLowerCase() + "%"));
+            }
             if (criteria.country() != null && !criteria.country().isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("country")), "%" + criteria.country().toLowerCase() + "%"));
             }
