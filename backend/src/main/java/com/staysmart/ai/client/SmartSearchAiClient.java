@@ -28,8 +28,15 @@ public interface SmartSearchAiClient {
             - amenities is a JSON array of amenity names the guest wants, chosen ONLY from this
               exact list (copy the name verbatim, case-sensitive): {{amenityCatalog}}
               If the query doesn't ask for any specific amenity, use an empty array [].
-            - keyword holds any remaining free-text theme (e.g. "beach", "quiet", "romantic")
-              that is not one of the amenities above.
+            - keyword holds a concrete feature or theme that would appear in a listing's title or
+              description (e.g. "beach", "houseboat", "heritage", "lake view", "desert camp") and
+              is not one of the amenities above. It is matched against listing text, so keep it
+              short and leave it null rather than include:
+              * price words ("cheap", "budget", "affordable", "luxury") - use minPrice/maxPrice;
+              * generic words ("stay", "place", "trip", "getaway", "vacation", "holiday", "hotel",
+                "rental");
+              * words already captured by another field (location, guests, dates, type, amenities);
+              * vague moods ("nice", "romantic", "relaxing", "cozy").
             - Output ONLY the raw JSON object, no markdown, no explanation, no code fences.
             """)
     @UserMessage("""

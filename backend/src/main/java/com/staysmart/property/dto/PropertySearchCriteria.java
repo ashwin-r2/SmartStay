@@ -26,4 +26,14 @@ public record PropertySearchCriteria(
     public static PropertySearchCriteria empty() {
         return new PropertySearchCriteria(null, null, null, null, null, null, null, null, null, null, null, null);
     }
+
+    public PropertySearchCriteria withoutKeyword() {
+        return new PropertySearchCriteria(city, state, country, checkIn, checkOut, guests, minPrice, maxPrice,
+                propertyType, roomType, amenityIds, null);
+    }
+
+    /** True if any filter other than {@code keyword} is set. */
+    public boolean hasNonKeywordFilters() {
+        return !withoutKeyword().equals(empty());
+    }
 }

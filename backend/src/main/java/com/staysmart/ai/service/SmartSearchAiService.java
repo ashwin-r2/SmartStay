@@ -7,11 +7,13 @@ import com.staysmart.ai.dto.SmartSearchResponse;
 import com.staysmart.ai.entity.AiFeature;
 import com.staysmart.common.dto.PageResponse;
 import com.staysmart.property.dto.PropertySearchCriteria;
+import com.staysmart.property.dto.PropertySummaryResponse;
 import com.staysmart.property.entity.Amenity;
 import com.staysmart.property.repository.AmenityRepository;
 import com.staysmart.property.service.PropertyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -44,10 +46,19 @@ public class SmartSearchAiService {
                 () -> client.parseQuery(query, today, amenityCatalog));
 
         PropertySearchCriteria criteria = parseOrFallback(rawJson, query, allAmenities);
-        PageResponse<com.staysmart.property.dto.PropertySummaryResponse> results =
-                PageResponse.from(propertyService.search(criteria, pageable));
+        Page<PropertySummaryResponse> page = propertyService.search(criteria, pageable);
 
-        return new SmartSearchResponse(criteria, results);
+        // The keyword must match listing text word-for-word, so vague words the AI keeps
+        // ("romantic", "cozy") can wipe out results that match every structured filter. If so,
+        // retry without it - but only when other filters remain, so we never return everything.
+        if (page.getTotalElements() == 0 && criteria.keyword() != null && criteria.hasNonKeywordFilters()) {
+            log.info("Smart Search found nothing for {}; retrying without keyword '{}'", criteria, criteria.keyword());
+            criteria = criteria.withoutKeyword();
+            page = propertyService.search(criteria, pageable);
+        }
+
+        // Return the criteria actually used: the frontend re-runs the search from these filters.
+        return new SmartSearchResponse(criteria, PageResponse.from(page));
     }
 
     private PropertySearchCriteria parseOrFallback(String rawJson, String originalQuery, List<Amenity> allAmenities) {
